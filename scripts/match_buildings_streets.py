@@ -4,6 +4,7 @@ from shapely.geometry import asShape
 
 STREETS_FILE = '../../datasets/oakland/streets.geojson.jsonlines'
 BUILDINGS_FILE = '../../datasets/oakland/buildings.geojson.jsonlines'
+NQUADS_FILE = '../data/nquads.txt'
 
 
 class StreetIndex(object):
@@ -30,9 +31,11 @@ class StreetIndex(object):
 
 if __name__ == '__main__':
     street_idx = StreetIndex(STREETS_FILE)
-    with open(BUILDINGS_FILE) as f:
-        for line in f.readlines():
-            building = json.loads(line)
-            building_id = building['properties']['objectid']
-            street_id = street_idx.find_nearest_street(building)
-            print 'Building %s is near street %s' % (building_id, street_id)
+    with open(BUILDINGS_FILE, 'r') as infile:
+        with open(NQUADS_FILE, 'w') as outfile:
+            for line in infile.readlines():
+                building = json.loads(line)
+                building_id = '/building/%s' % building['properties']['objectid']
+                street_id = '/street/%s' % street_idx.find_nearest_street(building)
+                outfile.write('"%s" "near" "%s" .' % (building_id, street_id))
+                outfile.write('\n')
