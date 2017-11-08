@@ -1,0 +1,18 @@
+=============== Nov 8, 2017 (UTC) ===============
+02:03:08.209364 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+02:03:08.213677 db@open opening
+02:03:08.215301 version@stat F·[] S·0B[] Sc·[]
+02:03:08.217165 db@janitor F·2 G·0
+02:03:08.217409 db@open done T·3.547574ms
+02:03:08.218609 db@close closing
+02:03:08.219161 db@close done T·549.645µs
+=============== Nov 8, 2017 (UTC) ===============
+02:03:08.220372 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+02:03:08.224729 version@stat F·[] S·0B[] Sc·[]
+02:03:08.225014 db@open opening
+02:03:08.225723 journal@recovery F·1
+02:03:08.233035 journal@recovery recovering @1
+02:03:08.236863 memdb@flush created L0@2 N·3 S·151B "__h..zon,v3":"__v..ion,v1"
+02:03:08.243947 version@stat F·[1] S·151B[151B] Sc·[0.25]
+02:03:08.252545 db@janitor F·3 G·0
+02:03:08.252805 db@open done T·27.621601ms

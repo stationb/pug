@@ -35,7 +35,9 @@ if __name__ == '__main__':
         with open(NQUADS_FILE, 'w') as outfile:
             for line in infile.readlines():
                 building = json.loads(line)
-                building_id = '/building/%s' % building['properties']['objectid']
-                street_id = '/street/%s' % street_idx.find_nearest_street(building)
-                outfile.write('"%s" "near" "%s" .' % (building_id, street_id))
+                building_id = 'pug://building/%s' % building['properties']['objectid']
+                street_id = 'pug://street/%s' % street_idx.find_nearest_street(building)
+                outfile.write('<%s> <pug://rel/on> <%s> .' % (building_id, street_id))
+                outfile.write('\n')
+                outfile.write('<%s> <pug://rel/connects_to> <%s> .' % (street_id, building_id))
                 outfile.write('\n')
