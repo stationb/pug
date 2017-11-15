@@ -13,4 +13,4 @@ query:
 load:
   ignore_duplicates: false
   ignore_missing: false
-  batch: 10000
+  batch: 1000000
