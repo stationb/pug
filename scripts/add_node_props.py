@@ -4,6 +4,7 @@ import sys
 
 
 IRI_TEMPLATE = '<pug://%s>'
+NQUAD_TEMPLATE = '%s %s %s .'
 V_TEMPLATE = '"%s"'
 TV_TEMPLATE = '"%s"^^http://www.w3.org/2001/XMLSchema#%s'
 
@@ -31,7 +32,7 @@ if __name__ == '__main__':
             node_id = '/'.join((node_type, node['properties']['id'].replace(' ', '_')))
             if node_id:
                 type_triple = IRI_TEMPLATE % node_id, IRI_TEMPLATE % 'rel/type', node_type_iri
-                print('%s %s %s' % type_triple)
+                print(NQUAD_TEMPLATE % type_triple)
                 for k, v in node['properties'].items():
                     rel = 'rel/%s' % k
                     if v:
@@ -43,4 +44,4 @@ if __name__ == '__main__':
                         else:
                             v = TV_TEMPLATE % (v, vtype)
                         triple = IRI_TEMPLATE % node_id, IRI_TEMPLATE % rel, v
-                        print('%s %s %s' % triple)
+                        print(NQUAD_TEMPLATE % triple)
