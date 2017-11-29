@@ -1,16 +1,11 @@
 store:
   # backend to use
-  backend: leveldb
+  backend: sql
   # address or path for the database
-  address: "/data/pug"
-  # open database in read-only mode
-  read_only: false
-  # backend-specific options
-  options:
-    nosync: false
+  address: "postgres://postgres:mA26WWpvR7xTyWzaGO@35.199.188.1:5432/postgres"
 query:
   timeout: 30s
 load:
   ignore_duplicates: true
   ignore_missing: true
-  batch: 10000
+  batch: 1000
