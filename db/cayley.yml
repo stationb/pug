@@ -11,6 +11,6 @@ store:
 query:
   timeout: 30s
 load:
-  ignore_duplicates: false
-  ignore_missing: false
-  batch: 1000000
+  ignore_duplicates: true
+  ignore_missing: true
+  batch: 10000
