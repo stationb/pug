@@ -4,6 +4,7 @@ from shapely.geometry import asShape
 
 STREETS_FILE = '../../datasets/oakland/out/streets.jsonlines'
 BUILDINGS_FILE = '../../datasets/oakland/out/buildings.jsonlines'
+STREET_LIGHTS_FILE = '../../datasets/oakland/out/street_lights_geo.jsonlines'
 NQUADS_FILE = '../data/nquads.txt'
 
 
@@ -35,13 +36,20 @@ class StreetIndex(object):
         i = abs(seg_id) / 1000000
         return abs(seg_id) - i
 
-    def find_nearest_street(self, building):
-        building_shape = asShape(building['geometry'])
-        building_centroid = (
-            float(building_shape.centroid.coords.xy[0][0]),
-            float(building_shape.centroid.coords.xy[1][0])
-        )
-        street_id = list(self.bb_idx.nearest(building_centroid))[0]
+    def find_nearest_street(self, shape):
+        shape = asShape(shape['geometry'])
+        shape_type = shape.geom_type
+        if shape_type == 'Polygon' or shape_type == 'MultiPolygon':
+            ref_point = (
+                float(shape.centroid.coords.xy[0][0]),
+                float(shape.centroid.coords.xy[1][0])
+            )
+        else:
+            ref_point = (
+                float(shape.coords.xy[0][0]),
+                float(shape.coords.xy[1][0])
+            )
+        street_id = list(self.bb_idx.nearest(ref_point))[0]
         return str(street_id)
 
     def find_connected_street(self, street):
@@ -63,11 +71,24 @@ if __name__ == '__main__':
         with open(BUILDINGS_FILE, 'r') as infile:
             for line in infile.readlines():
                 building = json.loads(line)
-                building_id = 'pug://building/%s' % building['properties']['id'].replace(' ', '_')
+                building_id = 'pug://building/%s' % (
+                    building['properties']['id'].replace(' ', '_')
+                )
                 street_id = 'pug://street/%s' % street_idx.find_nearest_street(building)
                 outfile.write('<%s> <pug://rel/on> <%s> .' % (building_id, street_id))
                 outfile.write('\n')
                 outfile.write('<%s> <pug://rel/connects_to> <%s> .' % (street_id, building_id))
+                outfile.write('\n')
+        with open(STREET_LIGHTS_FILE, 'r') as infile:
+            for line in infile.readlines():
+                street_light = json.loads(line)
+                street_light_id = 'pug://street_light/%s' % (
+                    street_light['properties']['id'].replace(' ', '_')
+                )
+                street_id = 'pug://street/%s' % street_idx.find_nearest_street(street_light)
+                outfile.write('<%s> <pug://rel/on> <%s> .' % (street_light_id, street_id))
+                outfile.write('\n')
+                outfile.write('<%s> <pug://rel/connects_to> <%s> .' % (street_id, street_light_id))
                 outfile.write('\n')
         with open(STREETS_FILE, 'r') as infile:
             for line in infile.readlines():
